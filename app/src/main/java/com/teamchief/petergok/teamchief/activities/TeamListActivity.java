@@ -3,15 +3,22 @@ package com.teamchief.petergok.teamchief.activities;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import android.widget.ListView;
+import android.view.View;
 
 import com.teamchief.petergok.teamchief.R;
-import com.teamchief.petergok.teamchief.activities.ListActivity;
+import com.teamchief.petergok.teamchief.adapters.TeamListAdapter;
 
 
 public class TeamListActivity extends ListActivity {
 
-    String[] itemname ={
+    Integer[] fakeImageIds = {
+            1,1,3,4,5,7,8
+    };
+
+
+    String[] teamName ={
             "SYDE 162 Design Group",
             "JY Waterloo",
             "Music Ministry",
@@ -26,10 +33,17 @@ public class TeamListActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_list);
 
-        this.setListAdapter(new ArrayAdapter<String>(
-                this, R.layout.team_row,
-                R.id.team_name,itemname));
-        }
+
+
+        TeamListAdapter adapter=new TeamListAdapter(this, teamName, fakeImageIds);
+        setListAdapter(adapter);
+    }
+
+    public void onListItemClick(ListView lv ,View view,int position,int imgid) {
+
+        String Selecteditem= (String)getListAdapter().getItem(position);
+        Toast.makeText(this, Selecteditem, Toast.LENGTH_SHORT).show();
+    }
 
 
     @Override

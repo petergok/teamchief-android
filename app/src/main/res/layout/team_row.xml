@@ -1,20 +1,81 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:id="@+id/team_row_cell"
+    android:weightSum="10">
+
     <ImageView
         android:id="@+id/team_icon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/logo" />
-    <TextView
-        android:id="@+id/team_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:paddingTop="5dp"/>
+        android:layout_marginTop="12dp"
+        android:src="@drawable/logo"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:orientation="vertical"
+        android:layout_weight="6"
+        android:id="@+id/message_info">
+
+        <TextView
+            android:id="@+id/team_name"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:layout_weight="1"
+            android:layout_marginTop="12dp"
+            android:textSize="18sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#0099f1"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/recent_message"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:layout_weight="1"
+            android:textSize="12sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#000000"
+            android:text="Let's meet at the Library?"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:layout_weight="2"
+        android:weightSum="4"
+        android:id="@+id/team_icons">
+
+        <ImageView
+            android:id="@+id/timestamp_icon"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/clock_icon"/>
+
+        <TextView
+            android:id="@+id/timestamp_message"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:layout_weight="1"
+            android:textSize="8sp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#868992"
+            android:text="2 hours ago"
+            android:layout_gravity="center_vertical"
+            android:singleLine="true"/>
+
+    </LinearLayout>
+
+
 </LinearLayout>

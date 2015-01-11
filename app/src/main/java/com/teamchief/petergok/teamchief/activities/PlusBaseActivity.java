@@ -1,4 +1,4 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.activities;
 
 import android.content.Intent;
 import android.content.IntentSender;
@@ -9,7 +9,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
-import com.teamchief.petergok.teamchief.activities.BaseActivity;
 
 
 /**

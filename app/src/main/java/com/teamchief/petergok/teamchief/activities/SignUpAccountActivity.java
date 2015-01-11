@@ -1,4 +1,4 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
-import com.teamchief.petergok.teamchief.activities.BaseActivity;
+import com.teamchief.petergok.teamchief.R;
 
 
 public class SignUpAccountActivity extends BaseActivity {

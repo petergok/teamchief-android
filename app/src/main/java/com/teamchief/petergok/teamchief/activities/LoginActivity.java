@@ -1,4 +1,4 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.teamchief.petergok.teamchief.R;
 
 import java.util.ArrayList;
 import java.util.List;

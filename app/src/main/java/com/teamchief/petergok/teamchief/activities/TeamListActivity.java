@@ -1,10 +1,11 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.activities;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.activities.ListActivity;
 
 

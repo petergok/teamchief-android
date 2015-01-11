@@ -30,10 +30,13 @@
             android:authorities="com.teamchief.petergok.teamchief.contentprovider" >
         </provider>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden" >
-            <category android:name="android.intent.category.LAUNCHER" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.MessageListActivity"
@@ -46,11 +49,11 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".TeamListActivity"
+            android:name=".activities.TeamListActivity"
             android:label="@string/title_activity_team_list" >
         </activity>
         <activity
-            android:name=".SignUpAccountActivity"
+            android:name=".activities.SignUpAccountActivity"
             android:label="@string/title_activity_sign_up_account" >
         </activity>
         <receiver

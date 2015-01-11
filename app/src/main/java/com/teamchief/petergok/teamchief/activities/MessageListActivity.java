@@ -1,6 +1,5 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.activities;
 
-import android.app.ListActivity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Loader;
@@ -10,19 +9,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.adapters.MessageCursorAdapter;
+import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.R;
+
 
 public class MessageListActivity extends ListActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
+
     private MessageCursorAdapter mAdapter;
     private Cursor mCursor;
     private ListView mListView;
-    private String mTeamId = "sdfd";
+    private String mTeamId = "54b1af3088a8f50200000004";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.messages_list);
         mListView = (ListView) findViewById(android.R.id.list);
+        getNewMessages(mTeamId);
         refreshList();
     }
 
@@ -60,7 +66,7 @@ public class MessageListActivity extends ListActivity
         String[] projection = MessagesTable.getFullProjection();
         CursorLoader cursorLoader = new CursorLoader(this,
                 ConversationContentProvider.CONTENT_URI, projection,
-                MessagesTable.COLUMN_TEAM_ID + "=" + mTeamId, null,
+                MessagesTable.COLUMN_TEAM_ID + " = ?", new String[] {mTeamId},
                 MessagesTable.COLUMN_SEND_TIME + " ASC");
         return cursorLoader;
     }

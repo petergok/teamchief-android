@@ -1,10 +1,11 @@
 package com.teamchief.petergok.teamchief;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+
+import com.teamchief.petergok.teamchief.activities.ListActivity;
 
 
 public class TeamListActivity extends ListActivity {

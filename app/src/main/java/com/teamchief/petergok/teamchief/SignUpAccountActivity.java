@@ -3,15 +3,16 @@ package com.teamchief.petergok.teamchief;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import com.teamchief.petergok.teamchief.activities.BaseActivity;
 
-public class SignUpAccountActivity extends ActionBarActivity {
+
+public class SignUpAccountActivity extends BaseActivity {
 
 
     Typeface latoBlackTypeFace, regularLatoTypeFace;

@@ -1,8 +1,10 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.teamchief.petergok.teamchief.model.MessagesTable;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "teamchief.db";

@@ -3,20 +3,19 @@ package com.teamchief.petergok.teamchief;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-
-import android.app.Activity;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.plus.PlusClient;
+import com.teamchief.petergok.teamchief.activities.BaseActivity;
 
 
 /**
  * A base class to wrap communication with the Google Play Services PlusClient.
  */
-public abstract class PlusBaseActivity extends Activity
+public abstract class PlusBaseActivity extends BaseActivity
         implements GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener {
 

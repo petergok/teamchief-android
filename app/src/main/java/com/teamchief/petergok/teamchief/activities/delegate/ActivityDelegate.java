@@ -1,10 +1,8 @@
-package com.teamchief.petergok.teamchief.activities;
+package com.teamchief.petergok.teamchief.activities.delegate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -34,7 +32,7 @@ import java.io.IOException;
 /**
  * Created by Peter on 2015-01-10.
  */
-public abstract class BaseActivity extends Activity {
+public class ActivityDelegate {
     protected final static String TAG = "MessageListActivity";
 
     private static final String PROPERTY_REG_ID = "registrationId";
@@ -52,6 +50,12 @@ public abstract class BaseActivity extends Activity {
     protected Context mContext;
 
     protected AlertDialog mAlertDialog;
+
+    private Activity mActivity;
+
+    public ActivityDelegate(Activity activity) {
+        mActivity = activity;
+    }
 
     /**
      * A broadcast reciever that is used to recieve broadcasts from the GCM reciever
@@ -79,16 +83,16 @@ public abstract class BaseActivity extends Activity {
                 + " >= (select max(" + MessagesTable.COLUMN_SEND_TIME + ") from "
                 + MessagesTable.TABLE_MESSAGES + ")";
 
-        Cursor cursor = getContentResolver().query(ConversationContentProvider.CONTENT_URI,
+        Cursor cursor = mActivity.getContentResolver().query(ConversationContentProvider.CONTENT_URI,
                 new String[] {MessagesTable.COLUMN_SEND_TIME, MessagesTable.COLUMN_MESSAGE_ID}, where, null, null);
 
         cursor.moveToFirst();
         if (cursor.isAfterLast()) {
-            new GetTeamTask(BaseActivity.this, getUsername(), getPassword(), teamId, 0, 0, "").execute();
+            new GetTeamTask(this, mActivity, getUsername(), getPassword(), teamId, 0, 0, "").execute();
         } else {
             long sendTime = cursor.getLong(0);
             String messageId = cursor.getString(1);
-            new GetTeamTask(BaseActivity.this, getUsername(), getPassword(), teamId, sendTime, 0,
+            new GetTeamTask(this, mActivity, getUsername(), getPassword(), teamId, sendTime, 0,
                     messageId).execute();
 
         }
@@ -96,19 +100,16 @@ public abstract class BaseActivity extends Activity {
         cursor.close();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public void onCreate(Bundle savedInstanceState) {
         // Register the broadcast reciever
-        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(this);
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(mActivity);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(NEW_MESSAGE);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-        mContext = getApplicationContext();
+        mContext = mActivity.getApplicationContext();
         if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(this);
+            gcm = GoogleCloudMessaging.getInstance(mActivity);
             regid = getRegistrationId(mContext);
 
             if (regid.isEmpty()) {
@@ -121,9 +122,7 @@ public abstract class BaseActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    public void onResume() {
         checkPlayServices();
     }
 
@@ -135,7 +134,7 @@ public abstract class BaseActivity extends Activity {
      * @return registration ID, or empty string if there is no existing
      *         registration ID.
      */
-    private String getRegistrationId(Context context) {
+    public String getRegistrationId(Context context) {
         final SharedPreferences prefs = getGCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
@@ -160,14 +159,14 @@ public abstract class BaseActivity extends Activity {
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(mActivity);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                GooglePlayServicesUtil.getErrorDialog(resultCode, mActivity,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
                 Log.i(TAG, "This device is not supported.");
-                finish();
+                mActivity.finish();
             }
             return false;
         }
@@ -180,7 +179,7 @@ public abstract class BaseActivity extends Activity {
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
      */
-    private void registerInBackground() {
+    public void registerInBackground() {
         new AsyncTask() {
             @Override
             protected String doInBackground(Object[] params) {
@@ -265,7 +264,7 @@ public abstract class BaseActivity extends Activity {
      * @param context application's context.
      * @param regId registration ID
      */
-    private void storeRegistrationId(Context context, String regId) {
+    public void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getGCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
@@ -278,7 +277,7 @@ public abstract class BaseActivity extends Activity {
     /**
      * @return Application's version code from the {@code PackageManager}.
      */
-    private static int getAppVersion(Context context) {
+    public static int getAppVersion(Context context) {
         try {
             PackageInfo packageInfo = context.getPackageManager()
                     .getPackageInfo(context.getPackageName(), 0);
@@ -292,10 +291,10 @@ public abstract class BaseActivity extends Activity {
     /**
      * @return Application's {@code SharedPreferences}.
      */
-    private SharedPreferences getGCMPreferences(Context context) {
+    public SharedPreferences getGCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return getSharedPreferences(MessageListActivity.class.getSimpleName(),
+        return mActivity.getSharedPreferences(mActivity.getClass().getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 
@@ -307,16 +306,14 @@ public abstract class BaseActivity extends Activity {
             mAlertDialog.dismiss();
         }
 
-        final BaseActivity activity = this;
-
-        runOnUiThread(new Runnable() {
+        mActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // Check if the network is available and notify the user of the device state accordingly
                 if (isNetworkAvailable()) {
-                    Toast.makeText(activity, "An error occured while connecting", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, "An error occured while connecting", Toast.LENGTH_SHORT).show();
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity, AlertDialog.THEME_HOLO_DARK);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity, AlertDialog.THEME_HOLO_DARK);
                     mAlertDialog = builder.setTitle("Network Error").setMessage("Please make sure that you are connected to the internet.")
                             .setPositiveButton("OK", null).create();
                     mAlertDialog.show();
@@ -330,9 +327,9 @@ public abstract class BaseActivity extends Activity {
      *
      * @return if the network is available
      */
-    private boolean isNetworkAvailable() {
+    public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

@@ -1,5 +1,6 @@
 package com.teamchief.petergok.teamchief.tasks;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.SQLException;
@@ -7,8 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.activities.BaseActivity;
-import com.teamchief.petergok.teamchief.activities.MessageListActivity;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.gson.GsonMessage;
 import com.teamchief.petergok.teamchief.gson.GsonTeam;
 import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
@@ -36,7 +36,8 @@ import java.util.List;
  * Created by Peter on 2015-01-10.
  */
 public class GetTeamTask extends BaseTask {
-    private BaseActivity mActivity;
+    private Activity mActivity;
+    private ActivityDelegate mDelegate;
     private String mUserName;
     private String mPassword;
     private String mTeamId;
@@ -44,10 +45,11 @@ public class GetTeamTask extends BaseTask {
     private long mBefore;
     private String mLastMessageId;
 
-    public GetTeamTask(BaseActivity activity, String userName,
+    public GetTeamTask(ActivityDelegate delegate, Activity activity, String userName,
                        String password, String teamId, long after, long before, String lastMessageId) {
         super(0, false);
-        mActivity = activity;
+        mActivity = mActivity;
+        mDelegate = delegate;
         mUserName = userName;
         mPassword = password;
         mTeamId = teamId;
@@ -79,7 +81,7 @@ public class GetTeamTask extends BaseTask {
             }
         } catch (ClientProtocolException e) {
         } catch (IOException e) {
-            mActivity.checkNetworkConnection();
+            mDelegate.checkNetworkConnection();
         }
         return responseString;
     }

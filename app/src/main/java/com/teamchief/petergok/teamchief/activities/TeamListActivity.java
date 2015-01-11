@@ -1,15 +1,17 @@
 package com.teamchief.petergok.teamchief.activities;
 
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.teamchief.petergok.teamchief.R;
-import com.teamchief.petergok.teamchief.activities.ListActivity;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 
 public class TeamListActivity extends ListActivity {
+    private ActivityDelegate mDelegate = new ActivityDelegate(this);
 
     String[] itemname ={
             "SYDE 162 Design Group",
@@ -24,12 +26,19 @@ public class TeamListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDelegate.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_list);
 
         this.setListAdapter(new ArrayAdapter<String>(
                 this, R.layout.team_row,
                 R.id.team_name,itemname));
-        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
+    }
 
 
     @Override

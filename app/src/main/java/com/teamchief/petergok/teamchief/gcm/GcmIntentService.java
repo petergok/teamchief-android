@@ -1,5 +1,6 @@
 package com.teamchief.petergok.teamchief.gcm;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,8 +13,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.activities.MessageListActivity;
 import com.teamchief.petergok.teamchief.R;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 /**
  * Created by Peter on 2015-01-08.
@@ -70,7 +71,7 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MessageListActivity.class), 0);
+                new Intent(this, Activity.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -105,7 +106,7 @@ public class GcmIntentService extends IntentService {
                 String senderName = data.getString("senderName");
                 String teamId = data.getString("teamId");
 
-                Intent intent = new Intent(MessageListActivity.NEW_MESSAGE);
+                Intent intent = new Intent(ActivityDelegate.NEW_MESSAGE);
                 intent.putExtra("text", text);
                 intent.putExtra("sendTime", sendTime);
                 intent.putExtra("senderName", senderName);

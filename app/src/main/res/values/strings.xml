@@ -2,7 +2,22 @@
 <resources>
 
     <string name="app_name">TeamChief</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forgot_prompt">Forgot your password?</string>
+    <string name="title">TEAM CHIEF</string>
+    <string name="slogan">Get stuff done!</string>
+    <string name="sign_in_prompt">Sign In</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_message_list">TeamList</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_team_list">TeamListActivity</string>
+    <string name="title_activity_sign_up_account">SignUpAccountActivity</string>
+
+    <string name="welcome_message">Welcome to Team Chief</string>
+    <string name="prompt_signup_username">New Username</string>
+    <string name="prompt_signup_password">New Password</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="login_redirect_prompt">Already have an account?</string>
 
 </resources>

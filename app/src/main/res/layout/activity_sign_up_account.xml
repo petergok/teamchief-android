@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:gravity="center_horizontal"
+    android:orientation="vertical" android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
+    tools:context="com.teamchief.petergok.teamchief.LoginActivity">
+
+    <!-- HEADER -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/sign_up_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="15dp"
+        android:textSize="34sp"
+        android:textColor="#4b4d52"
+        android:gravity="center"
+        android:text="@string/welcome_message" />
+
+
+    <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout android:id="@+id/username_login_form" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="30dp">
+
+                <EditText android:id="@+id/username" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="@string/prompt_signup_username"
+                    android:inputType="textEmailAddress" android:maxLines="1"
+                    android:singleLine="true" />
+                <EditText android:id="@+id/password" android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:hint="@string/prompt_signup_password"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified" android:inputType="textPassword"
+                    android:maxLines="1" android:singleLine="true" />
+
+                <Button android:id="@+id/sign_in_button" style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:text="@string/action_sign_up"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="#0099f1"/>
+
+                <Button
+                    android:id="@+id/login_redirect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="15sp"
+                    android:textColor="#868992"
+                    android:background="@android:color/transparent"
+                    android:text="@string/login_redirect_prompt"
+                    android:onClick="login_redirect"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
+
+
+

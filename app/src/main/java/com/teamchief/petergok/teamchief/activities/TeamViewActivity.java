@@ -46,6 +46,8 @@ public class TeamViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
 
+        mDelegate.login("peter", "pass");
+
         setContentView(R.layout.activity_team_view);
 
         // Instantiate a ViewPager and a PagerAdapter.

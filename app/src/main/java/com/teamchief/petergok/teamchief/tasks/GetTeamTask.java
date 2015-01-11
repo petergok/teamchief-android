@@ -36,7 +36,6 @@ import java.util.List;
  * Created by Peter on 2015-01-10.
  */
 public class GetTeamTask extends BaseTask {
-    private Activity mActivity;
     private ActivityDelegate mDelegate;
     private String mUserName;
     private String mPassword;
@@ -45,10 +44,9 @@ public class GetTeamTask extends BaseTask {
     private long mBefore;
     private String mLastMessageId;
 
-    public GetTeamTask(ActivityDelegate delegate, Activity activity, String userName,
+    public GetTeamTask(ActivityDelegate delegate, String userName,
                        String password, String teamId, long after, long before, String lastMessageId) {
         super(0, false);
-        mActivity = mActivity;
         mDelegate = delegate;
         mUserName = userName;
         mPassword = password;
@@ -124,7 +122,7 @@ public class GetTeamTask extends BaseTask {
         }
 
         if (team != null) {
-            ContentResolver cr = mActivity.getContentResolver();
+            ContentResolver cr = mDelegate.getActivity().getContentResolver();
             List<ContentValues> messages = new ArrayList<>();
             for (GsonMessage message : team.messages) {
                 if (!message.id.equals(mLastMessageId)) {

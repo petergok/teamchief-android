@@ -78,6 +78,10 @@ public class ActivityDelegate {
         }
     };
 
+    public Activity getActivity() {
+        return mActivity;
+    }
+
     public void getNewMessages(String teamId) {
         String where = MessagesTable.COLUMN_SEND_TIME
                 + " >= (select max(" + MessagesTable.COLUMN_SEND_TIME + ") from "
@@ -88,11 +92,11 @@ public class ActivityDelegate {
 
         cursor.moveToFirst();
         if (cursor.isAfterLast()) {
-            new GetTeamTask(this, mActivity, getUsername(), getPassword(), teamId, 0, 0, "").execute();
+            new GetTeamTask(this, getUsername(), getPassword(), teamId, 0, 0, "").execute();
         } else {
             long sendTime = cursor.getLong(0);
             String messageId = cursor.getString(1);
-            new GetTeamTask(this, mActivity, getUsername(), getPassword(), teamId, sendTime, 0,
+            new GetTeamTask(this, getUsername(), getPassword(), teamId, sendTime, 0,
                     messageId).execute();
 
         }

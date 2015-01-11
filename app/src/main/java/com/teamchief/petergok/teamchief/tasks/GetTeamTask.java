@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.teamchief.petergok.teamchief.Constants;
+import com.teamchief.petergok.teamchief.activities.TeamViewActivity;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.gson.GsonMessage;
 import com.teamchief.petergok.teamchief.gson.GsonTeam;

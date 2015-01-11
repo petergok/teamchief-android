@@ -35,10 +35,10 @@ import java.io.IOException;
 public class ActivityDelegate {
     protected final static String TAG = "MessageListActivity";
 
-    private static final String PROPERTY_REG_ID = "registrationId";
-    private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String PROPERTY_USERNAME = "username";
-    private static final String PROPERTY_PASSWORD = "password";
+    public static final String PROPERTY_REG_ID = "registrationId";
+    public static final String PROPERTY_APP_VERSION = "appVersion";
+    public static final String PROPERTY_USERNAME = "username";
+    public static final String PROPERTY_PASSWORD = "password";
 
     public final static String NEW_MESSAGE = "new_message";
 
@@ -128,7 +128,9 @@ public class ActivityDelegate {
             if (regid.isEmpty()) {
                 registerInBackground();
             } else {
-                sendRegistrationIdToBackend(10);
+                if (loggedIn()) {
+                    sendRegistrationIdToBackend(10);
+                }
             }
         } else {
             Log.i(TAG, "No valid Google Play Services APK found.");
@@ -258,7 +260,7 @@ public class ActivityDelegate {
         return prefs.getString(PROPERTY_PASSWORD, "");
     }
 
-    public void login(String username, String password) {
+    public void loginLocal(String username, String password) {
         final SharedPreferences prefs = getGCMPreferences(mContext);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_USERNAME, username);
@@ -266,8 +268,8 @@ public class ActivityDelegate {
         editor.commit();
     }
 
-    public void logout() {
-        login("", "");
+    public void logoutLocal() {
+        loginLocal("", "");
     }
 
     /**
@@ -307,7 +309,7 @@ public class ActivityDelegate {
     public SharedPreferences getGCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
-        return mActivity.getSharedPreferences(mActivity.getClass().getSimpleName(),
+        return mActivity.getSharedPreferences(Activity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
     }
 

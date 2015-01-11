@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,12 +29,31 @@ public class GcmIntentService extends IntentService {
     public static final int NOTIFICATION_ID = 1;
     private NotificationManager mNotificationManager;
     NotificationCompat.Builder builder;
+    private String mUsername;
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
      */
     public GcmIntentService() {
         super(Constants.SENDER_ID);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mUsername = getUsername();
+    }
+
+    public String getUsername() {
+        final SharedPreferences prefs = getGCMPreferences(this);
+        return prefs.getString(ActivityDelegate.PROPERTY_USERNAME, "");
+    }
+
+    public SharedPreferences getGCMPreferences(Context context) {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the regID in your app is up to you.
+        return getSharedPreferences(Activity.class.getSimpleName(),
+                Context.MODE_PRIVATE);
     }
 
     @Override
@@ -54,7 +74,9 @@ public class GcmIntentService extends IntentService {
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 Log.d(TAG, "Received: " + extras.toString());
-                sendNotification(extras.getString("text"));
+                if (!extras.getString("senderName").equals(mUsername)) {
+                    sendNotification(extras.getString("text"));
+                }
                 parseAndReportMessage(extras);
             }
         }

@@ -15,7 +15,8 @@
         android:divider="@null"
         android:dividerHeight="0dp"
         android:stackFromBottom="true"
-        tools:listitem="@layout/message_left">
+        tools:listitem="@layout/message_left"
+        android:transcriptMode="alwaysScroll">
     </ListView>
 
     <RelativeLayout

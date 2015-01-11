@@ -11,7 +11,6 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -30,8 +29,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
+import com.teamchief.petergok.teamchief.fragments.TeamListFragment;
+import com.teamchief.petergok.teamchief.tasks.BaseTask;
+import com.teamchief.petergok.teamchief.tasks.ChiefRestClient;
+
+import org.apache.http.Header;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,18 +54,10 @@ import java.util.List;
 public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
 
     private ActivityDelegate mDelegate = new ActivityDelegate(this);
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
+    /*
      * Keep track of the attemptLogin task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private boolean mAuthenticating = false;
 
 
     //Custom Fonts
@@ -82,9 +80,13 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
 
+        if (mDelegate.loggedIn()) {
+            login(mDelegate.getUsername(), mDelegate.getPassword());
+            return;
+        }
+
         setContentView(R.layout.activity_login);
-        
-        
+
 
         ////////////// KEVIN's non-GOOGLE PLUS LOGIN STUFF BEGIN/////////////////
 
@@ -178,7 +180,7 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
      * errors are presented and no actual attemptLogin attempt is made.
      */
     public void attemptLogin() {
-        if (mAuthTask != null) {
+        if (mAuthenticating) {
             return;
         }
 
@@ -187,8 +189,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mPasswordView.setError(null);
         
         // Store values at the time of the attemptLogin attempt.
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        final String username = mUsernameView.getText().toString();
+        final String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -220,18 +222,56 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
             // Show a progress spinner, and kick off a background task to
             // perform the user attemptLogin attempt.
             showProgress(true);
-            login(username, password);
-            mAuthTask = new UserLoginTask(username, password); //UserLoginTask could contain logic of peter's login method.
-            mAuthTask.execute((Void) null);
+            mAuthenticating = true;
 
+            RequestParams params = new RequestParams();
+            params.put("username", username);
+            params.put("password", password);
+
+            final Activity activity = this;
+
+            ChiefRestClient.post("/login", params, new TextHttpResponseHandler() {
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    mAuthenticating = false;
+                    showProgress(false);
+
+                    mUsernameView.setError("");
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.requestFocus();
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    mAuthenticating = false;
+                    showProgress(false);
+
+                    if (responseString.equals(BaseTask.SUCCESS_RESULT)) {
+                        login(username, password);
+                    } else {
+                        mDelegate.loginLocal("", "");
+
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    }
+                }
+            });
         }
+    }
+
+    public void login(String username, String password) {
+        mDelegate.loginLocal(username, password);
+
+        Intent intent = new Intent(this, TeamListActivity.class);
+        startActivity(intent);
+
+        finish();
     }
 
     /**
      * Returns true if the username is not empty
      */
     private boolean isUsernameValid(String username) {
-
         return username.length() > 0;
     }
 
@@ -386,70 +426,6 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mUsernameView.setAdapter(adapter);
-    }
-
-    /**
-     * Represents an asynchronous attemptLogin/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-
-        UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mUsername)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
-
-    public void login(String username, String password) {
-        //TODO: Peter Implement this.
-
-        Intent intent = new Intent(this, TeamListActivity.class);
-        startActivity(intent);
     }
 
     public void forgotenPasswordProcedure(View v) {

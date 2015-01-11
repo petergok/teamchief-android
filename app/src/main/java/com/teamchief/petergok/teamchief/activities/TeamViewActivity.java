@@ -1,6 +1,5 @@
 package com.teamchief.petergok.teamchief.activities;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -56,7 +55,7 @@ public class TeamViewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
 
-        mDelegate.login("peter", "pass");
+        mDelegate.loginLocal("peter", "pass");
 
         setContentView(R.layout.activity_team_view);
 

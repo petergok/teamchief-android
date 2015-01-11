@@ -1,4 +1,4 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.model;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -13,6 +13,7 @@ public class MessagesTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TEAM_ID = "teamId";
     public static final String COLUMN_TEXT = "text";
+    public static final String COLUMN_MESSAGE_ID = "messageId";
     public static final String COLUMN_SEND_TIME = "sendTime";
     public static final String COLUMN_SENDER = "sender";
 
@@ -21,6 +22,7 @@ public class MessagesTable {
             + TABLE_MESSAGES
             + "("
             + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_MESSAGE_ID + " text not null,"
             + COLUMN_TEXT + " text not null, "
             + COLUMN_TEAM_ID + " text not null, "
             + COLUMN_SEND_TIME + " integer not null, "
@@ -28,7 +30,7 @@ public class MessagesTable {
             + ");";
 
     private static String[] FULL_PROJECTION = { COLUMN_SENDER,
-            COLUMN_SEND_TIME, COLUMN_TEAM_ID,
+            COLUMN_SEND_TIME, COLUMN_TEAM_ID, COLUMN_MESSAGE_ID,
             COLUMN_TEXT, COLUMN_ID };
 
     public static void onCreate(SQLiteDatabase database) {

@@ -1,10 +1,16 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.model.objects;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Peter on 2015-01-07.
  */
 public class Message {
     private long id;
+
+    @SerializedName(value="_id")
+    private String messageId;
+
     private String sender;
     private String text;
     private String teamId;
@@ -16,6 +22,14 @@ public class Message {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getText() {

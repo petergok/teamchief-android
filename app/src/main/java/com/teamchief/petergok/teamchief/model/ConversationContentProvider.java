@@ -1,4 +1,4 @@
-package com.teamchief.petergok.teamchief;
+package com.teamchief.petergok.teamchief.model;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,6 +12,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+
+import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.MySQLiteHelper;
 
 public class ConversationContentProvider extends ContentProvider {
 

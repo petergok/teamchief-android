@@ -9,11 +9,15 @@ import android.util.Log;
 public class MessagesTable {
     public static final String TABLE_MESSAGES = "messages";
 
+    public static final Integer FALSE = 0;
+    public static final Integer TRUE = 1;
+
     // MESSAGES Table - Columns
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TEAM_ID = "teamId";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_MESSAGE_ID = "messageId";
+    public static final String COLUMN_LOCAL = "local";
     public static final String COLUMN_SEND_TIME = "sendTime";
     public static final String COLUMN_SENDER = "sender";
 
@@ -23,6 +27,7 @@ public class MessagesTable {
             + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_MESSAGE_ID + " text not null,"
+            + COLUMN_LOCAL + " integer not null, "
             + COLUMN_TEXT + " text not null, "
             + COLUMN_TEAM_ID + " text not null, "
             + COLUMN_SEND_TIME + " integer not null, "
@@ -31,7 +36,7 @@ public class MessagesTable {
 
     private static String[] FULL_PROJECTION = { COLUMN_SENDER,
             COLUMN_SEND_TIME, COLUMN_TEAM_ID, COLUMN_MESSAGE_ID,
-            COLUMN_TEXT, COLUMN_ID };
+            COLUMN_TEXT, COLUMN_ID, COLUMN_LOCAL };
 
     public static void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_MESSAGES_TABLE);

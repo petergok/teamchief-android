@@ -1,21 +1,20 @@
 package com.teamchief.petergok.teamchief.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.ListFragment;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.teamchief.petergok.teamchief.R;
+import com.teamchief.petergok.teamchief.activities.TeamViewActivity;
 import com.teamchief.petergok.teamchief.adapters.MessageCursorAdapter;
 import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
 import com.teamchief.petergok.teamchief.model.MessagesTable;
@@ -27,29 +26,48 @@ import com.teamchief.petergok.teamchief.model.MessagesTable;
 public class ConversationPageFragment extends ListFragment
         implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    private Activity mActivity;
+    private TeamViewActivity mActivity;
     private MessageCursorAdapter mAdapter;
     private ListView mListView;
     private String mTeamId;
+    private EditText messageBodyField;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mTeamId = getArguments().getString("teamId");
-        mActivity = getActivity();
+        mActivity = (TeamViewActivity)getActivity();
 
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_messages_list, container, false);
+                R.layout.fragment_conversation, container, false);
         mListView = (ListView) container.findViewById(android.R.id.list);
 
         refreshList();
 
+        messageBodyField = (EditText) rootView.findViewById(R.id.messageBodyField);
+        rootView.findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
+
         return rootView;
+    }
+
+    private void sendMessage() {
+        String messageBody = messageBodyField.getText().toString();
+        if (messageBody.isEmpty()) {
+            Toast.makeText(mActivity, "Please enter a message", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        messageBodyField.setText("");
     }
 
     private void refreshList() {
         getLoaderManager().initLoader(0, null, this);
-        mAdapter = new MessageCursorAdapter(mActivity, null, 0);
+        mAdapter = new MessageCursorAdapter(mActivity, null, 0, mActivity.getDelegate());
 
         setListAdapter(mAdapter);
     }

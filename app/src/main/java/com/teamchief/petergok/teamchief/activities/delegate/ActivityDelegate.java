@@ -83,12 +83,15 @@ public class ActivityDelegate {
     }
 
     public void getNewMessages(String teamId) {
-        String where = MessagesTable.COLUMN_SEND_TIME
+        cleanTeam(teamId);
+
+        String where = MessagesTable.COLUMN_TEAM_ID + " = ? AND " + MessagesTable.COLUMN_SEND_TIME
                 + " >= (select max(" + MessagesTable.COLUMN_SEND_TIME + ") from "
-                + MessagesTable.TABLE_MESSAGES + ")";
+                + MessagesTable.TABLE_MESSAGES + " where " + MessagesTable.COLUMN_TEAM_ID + " = ? )";
 
         Cursor cursor = mActivity.getContentResolver().query(ConversationContentProvider.CONTENT_URI,
-                new String[] {MessagesTable.COLUMN_SEND_TIME, MessagesTable.COLUMN_MESSAGE_ID}, where, null, null);
+                new String[] {MessagesTable.COLUMN_SEND_TIME, MessagesTable.COLUMN_MESSAGE_ID}, where,
+                new String[] {teamId, teamId}, null);
 
         cursor.moveToFirst();
         if (cursor.isAfterLast()) {
@@ -102,6 +105,12 @@ public class ActivityDelegate {
         }
 
         cursor.close();
+    }
+
+    public void cleanTeam(String teamId) {
+        mActivity.getContentResolver().delete(ConversationContentProvider.CONTENT_URI,
+                MessagesTable.COLUMN_TEAM_ID + " = ? AND " + MessagesTable.COLUMN_LOCAL + " = ?",
+                new String[]{teamId, "" + MessagesTable.TRUE});
     }
 
     public void onCreate(Bundle savedInstanceState) {

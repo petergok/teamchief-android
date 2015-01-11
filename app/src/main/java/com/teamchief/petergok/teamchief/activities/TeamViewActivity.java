@@ -1,14 +1,19 @@
 package com.teamchief.petergok.teamchief.activities;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.ZoomOutPageTransformer;
@@ -19,11 +24,16 @@ import com.teamchief.petergok.teamchief.fragments.EmptyFragment;
 /**
  * Created by Peter on 2015-01-10.
  */
-public class TeamViewActivity extends Activity {
+public class TeamViewActivity extends ActionBarActivity {
 
     private ActivityDelegate mDelegate = new ActivityDelegate(this);
 
+    private final int highlightColor = Color.DKGRAY;
+    private final int defaultColor = Color.WHITE;
+
     private String mTeamId = "54b1af3088a8f50200000004";
+
+    private ImageView[] icons = new ImageView[NUM_PAGES];
 
     /**
      * The number of pages (wizard steps) to show in this demo.
@@ -52,17 +62,84 @@ public class TeamViewActivity extends Activity {
 
         // Instantiate a ViewPager and a PagerAdapter.
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
+        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                selectIcon(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+
+        icons[0] = (ImageView) findViewById(R.id.conversationIcon);
+        icons[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(0);
+            }
+        });
+        icons[1] = (ImageView) findViewById(R.id.icon2);
+        icons[1].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(1);
+            }
+        });
+        icons[2] = (ImageView) findViewById(R.id.icon3);
+        icons[2].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(2);
+            }
+        });
+        icons[3] = (ImageView) findViewById(R.id.icon4);
+        icons[3].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(3);
+            }
+        });
+        icons[4] = (ImageView) findViewById(R.id.icon5);
+        icons[4].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPager.setCurrentItem(4);
+            }
+        });
+
+        selectIcon(0);
 
         mDelegate.getNewMessages(mTeamId);
+    }
+
+    public void selectIcon(int position) {
+        for (int icon = 0; icon < NUM_PAGES; icon++) {
+            if (icon == position) {
+                icons[icon].setBackgroundColor(Color.parseColor("#007AC1"));
+                icons[icon].setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+            } else {
+                icons[icon].setBackgroundColor(0x00000000);
+                icons[icon].setColorFilter(defaultColor, PorterDuff.Mode.SRC_ATOP);
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mDelegate.onResume();
+    }
+
+    public ActivityDelegate getDelegate() {
+        return mDelegate;
     }
 
     @Override

@@ -12,6 +12,8 @@ import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.gson.GsonMessage;
 import com.teamchief.petergok.teamchief.gson.GsonTeam;
 import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.objects.Message;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -127,11 +129,12 @@ public class GetTeamTask extends BaseTask {
             for (GsonMessage message : team.messages) {
                 if (!message.id.equals(mLastMessageId)) {
                     ContentValues newValues = new ContentValues();
-                    newValues.put("messageId", message.id);
-                    newValues.put("sender", message.sender.username);
-                    newValues.put("sendTime", message.sendTime);
-                    newValues.put("text", message.text);
-                    newValues.put("teamId", mTeamId);
+                    newValues.put(MessagesTable.COLUMN_MESSAGE_ID, message.id);
+                    newValues.put(MessagesTable.COLUMN_SENDER, message.sender.username);
+                    newValues.put(MessagesTable.COLUMN_SEND_TIME, message.sendTime);
+                    newValues.put(MessagesTable.COLUMN_TEXT, message.text);
+                    newValues.put(MessagesTable.COLUMN_TEAM_ID, mTeamId);
+                    newValues.put(MessagesTable.COLUMN_LOCAL, MessagesTable.FALSE);
                     messages.add(newValues);
                 }
             }

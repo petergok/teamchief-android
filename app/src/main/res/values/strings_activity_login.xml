@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_login">Sign in</string>
+    <string name="application_title">Team Chief</string>
 
     <!-- Strings related to attemptLogin -->
     <string name="prompt_username">Username</string>

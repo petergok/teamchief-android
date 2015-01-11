@@ -1,5 +1,6 @@
 package com.teamchief.petergok.teamchief.tasks;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.SQLException;
@@ -7,11 +8,12 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.activities.BaseActivity;
-import com.teamchief.petergok.teamchief.activities.MessageListActivity;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.gson.GsonMessage;
 import com.teamchief.petergok.teamchief.gson.GsonTeam;
 import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.objects.Message;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -36,7 +38,7 @@ import java.util.List;
  * Created by Peter on 2015-01-10.
  */
 public class GetTeamTask extends BaseTask {
-    private BaseActivity mActivity;
+    private ActivityDelegate mDelegate;
     private String mUserName;
     private String mPassword;
     private String mTeamId;
@@ -44,10 +46,10 @@ public class GetTeamTask extends BaseTask {
     private long mBefore;
     private String mLastMessageId;
 
-    public GetTeamTask(BaseActivity activity, String userName,
+    public GetTeamTask(ActivityDelegate delegate, String userName,
                        String password, String teamId, long after, long before, String lastMessageId) {
         super(0, false);
-        mActivity = activity;
+        mDelegate = delegate;
         mUserName = userName;
         mPassword = password;
         mTeamId = teamId;
@@ -79,7 +81,7 @@ public class GetTeamTask extends BaseTask {
             }
         } catch (ClientProtocolException e) {
         } catch (IOException e) {
-            mActivity.checkNetworkConnection();
+            mDelegate.checkNetworkConnection();
         }
         return responseString;
     }
@@ -122,16 +124,17 @@ public class GetTeamTask extends BaseTask {
         }
 
         if (team != null) {
-            ContentResolver cr = mActivity.getContentResolver();
+            ContentResolver cr = mDelegate.getActivity().getContentResolver();
             List<ContentValues> messages = new ArrayList<>();
             for (GsonMessage message : team.messages) {
                 if (!message.id.equals(mLastMessageId)) {
                     ContentValues newValues = new ContentValues();
-                    newValues.put("messageId", message.id);
-                    newValues.put("sender", message.sender.username);
-                    newValues.put("sendTime", message.sendTime);
-                    newValues.put("text", message.text);
-                    newValues.put("teamId", mTeamId);
+                    newValues.put(MessagesTable.COLUMN_MESSAGE_ID, message.id);
+                    newValues.put(MessagesTable.COLUMN_SENDER, message.sender.username);
+                    newValues.put(MessagesTable.COLUMN_SEND_TIME, message.sendTime);
+                    newValues.put(MessagesTable.COLUMN_TEXT, message.text);
+                    newValues.put(MessagesTable.COLUMN_TEAM_ID, mTeamId);
+                    newValues.put(MessagesTable.COLUMN_LOCAL, MessagesTable.FALSE);
                     messages.add(newValues);
                 }
             }

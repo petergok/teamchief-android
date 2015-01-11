@@ -1,5 +1,6 @@
 package com.teamchief.petergok.teamchief.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.teamchief.petergok.teamchief.R;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 
-public class SignUpAccountActivity extends BaseActivity {
+public class SignUpAccountActivity extends Activity {
 
+    private ActivityDelegate mDelegate = new ActivityDelegate(this);
 
     Typeface latoBlackTypeFace, regularLatoTypeFace;
 
@@ -25,8 +28,15 @@ public class SignUpAccountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDelegate.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_account);
         setTitle("Sign Up For Team Chief");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
     }
 
 

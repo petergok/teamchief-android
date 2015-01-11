@@ -1,5 +1,6 @@
 package com.teamchief.petergok.teamchief.activities;
 
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,9 +10,11 @@ import android.view.View;
 
 import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.adapters.TeamListAdapter;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 
 public class TeamListActivity extends ListActivity {
+    private ActivityDelegate mDelegate = new ActivityDelegate(this);
 
     Integer[] fakeImageIds = {
             1,1,3,4,5,7,8
@@ -31,10 +34,8 @@ public class TeamListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDelegate.onCreate(savedInstanceState);
         setContentView(R.layout.activity_team_list);
-
-
-
         TeamListAdapter adapter=new TeamListAdapter(this, teamName, fakeImageIds);
         setListAdapter(adapter);
     }
@@ -43,6 +44,12 @@ public class TeamListActivity extends ListActivity {
 
         String Selecteditem= (String)getListAdapter().getItem(position);
         Toast.makeText(this, Selecteditem, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
     }
 
 

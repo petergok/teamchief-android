@@ -3,6 +3,7 @@ package com.teamchief.petergok.teamchief.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.teamchief.petergok.teamchief.R;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,8 @@ import java.util.List;
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
 public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<Cursor> {
+
+    private ActivityDelegate mDelegate = new ActivityDelegate(this);
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -76,6 +80,8 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDelegate.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
         
         
@@ -153,6 +159,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mProgressView = findViewById(R.id.login_progress);
         mUsernameLoginFormView = findViewById(R.id.username_login_form);
         mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDelegate.onResume();
     }
 
     private void populateAutoComplete() {

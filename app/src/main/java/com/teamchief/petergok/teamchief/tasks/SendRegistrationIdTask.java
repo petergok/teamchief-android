@@ -1,12 +1,12 @@
 package com.teamchief.petergok.teamchief.tasks;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.activities.BaseActivity;
-import com.teamchief.petergok.teamchief.activities.MessageListActivity;
+import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -29,16 +29,16 @@ import java.util.List;
  * Created by Peter on 2015-01-10.
  */
 public class SendRegistrationIdTask extends BaseTask {
-    private BaseActivity mActivity;
+    private ActivityDelegate mDelegate;
     private String mGcmId;
     private String mUserName;
     private String mPassword;
 
-    public SendRegistrationIdTask(BaseActivity activity, String gcmId, String userName,
+    public SendRegistrationIdTask(ActivityDelegate delegate, String gcmId, String userName,
                                   String password, long delayTime) {
         super (delayTime, true);
+        mDelegate = delegate;
         mGcmId = gcmId;
-        mActivity = activity;
         mUserName = userName;
         mPassword = password;
     }
@@ -72,7 +72,7 @@ public class SendRegistrationIdTask extends BaseTask {
             }
         } catch (ClientProtocolException e) {
         } catch (IOException e) {
-            mActivity.checkNetworkConnection();
+            mDelegate.checkNetworkConnection();
         }
         return responseString;
     }
@@ -82,7 +82,7 @@ public class SendRegistrationIdTask extends BaseTask {
         return new Runnable() {
             @Override
             public void run() {
-                mActivity.sendRegistrationIdToBackend(getNewDelay());
+                mDelegate.sendRegistrationIdToBackend(getNewDelay());
             }
         };
     }

@@ -3,6 +3,7 @@ package com.teamchief.petergok.teamchief.activities.delegate;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -22,8 +24,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
-import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.fragments.ConversationPageFragment;
+import com.teamchief.petergok.teamchief.model.MySQLiteHelper;
+import com.teamchief.petergok.teamchief.model.providers.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.providers.TeamsContentProvider;
+import com.teamchief.petergok.teamchief.model.tables.MessagesTable;
 import com.teamchief.petergok.teamchief.tasks.GetTeamTask;
 import com.teamchief.petergok.teamchief.tasks.SendRegistrationIdTask;
 
@@ -347,5 +352,15 @@ public class ActivityDelegate {
                 = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    /**
+     * Remove all users and groups from database.
+     */
+    public void clearAllDatabase() {
+        ContentResolver cr = mActivity.getContentResolver();
+
+        cr.delete(TeamsContentProvider.CONTENT_URI, null, null);
+        cr.delete(ConversationContentProvider.CONTENT_URI, null, null);
     }
 }

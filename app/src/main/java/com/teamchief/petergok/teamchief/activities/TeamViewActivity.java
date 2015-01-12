@@ -30,7 +30,7 @@ public class TeamViewActivity extends ActionBarActivity {
     private final int highlightColor = Color.DKGRAY;
     private final int defaultColor = Color.WHITE;
 
-    private String mTeamId = "54b1af3088a8f50200000004";
+    private String mTeamId;
 
     private ImageView[] icons = new ImageView[NUM_PAGES];
 
@@ -55,7 +55,7 @@ public class TeamViewActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         mDelegate.onCreate(savedInstanceState);
 
-        mDelegate.loginLocal("peter", "pass");
+        mTeamId = getIntent().getStringExtra("teamId");
 
         setContentView(R.layout.activity_team_view);
 

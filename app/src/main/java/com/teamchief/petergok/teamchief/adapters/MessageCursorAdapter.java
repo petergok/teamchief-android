@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
-import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.tables.MessagesTable;
 
 import java.util.Date;
 

@@ -1,7 +1,4 @@
-package com.teamchief.petergok.teamchief.model;
-
-import java.util.Arrays;
-import java.util.HashSet;
+package com.teamchief.petergok.teamchief.model.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -13,34 +10,41 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.teamchief.petergok.teamchief.model.MessagesTable;
 import com.teamchief.petergok.teamchief.model.MySQLiteHelper;
+import com.teamchief.petergok.teamchief.model.tables.TeamsTable;
 
-public class ConversationContentProvider extends ContentProvider {
+import java.util.Arrays;
+import java.util.HashSet;
 
-    private static HashSet<String> AVAILABLE_COLUMNS = new HashSet<>(Arrays.asList(MessagesTable.getFullProjection()));
+import javax.xml.transform.Templates;
+
+/**
+ * Created by Peter on 2015-01-11.
+ */
+public class TeamsContentProvider extends ContentProvider {
+    private static HashSet<String> AVAILABLE_COLUMNS = new HashSet<>(Arrays.asList(TeamsTable.getFullProjection()));
     // database
     private MySQLiteHelper database;
 
     // used for the UriMacher
-    private static final int MESSAGES = 10;
-    private static final int MESSAGE_ID = 20;
+    private static final int TEAMS = 11;
+    private static final int TEAM_ID = 21;
 
-    private static final String AUTHORITY = "com.teamchief.petergok.teamchief.contentprovider";
+    private static final String AUTHORITY = "com.teamchief.petergok.teamchief.teamscontentprovider";
 
-    private static final String BASE_PATH = "messages";
+    private static final String BASE_PATH = "teams";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + BASE_PATH);
 
     public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/messages";
+            + "/teams";
     public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/message";
+            + "/team";
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH, MESSAGES);
-        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", MESSAGE_ID);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH, TEAMS);
+        sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", TEAM_ID);
     }
 
     @Override
@@ -60,15 +64,15 @@ public class ConversationContentProvider extends ContentProvider {
         checkColumns(projection);
 
         // Set the table
-        queryBuilder.setTables(MessagesTable.TABLE_MESSAGES);
+        queryBuilder.setTables(TeamsTable.TABLE_TEAMS);
 
         int uriType = sURIMatcher.match(uri);
         switch (uriType) {
-            case MESSAGES:
+            case TEAMS:
                 break;
-            case MESSAGE_ID:
+            case TEAM_ID:
                 // adding the ID to the original query
-                queryBuilder.appendWhere(MessagesTable.COLUMN_ID + "="
+                queryBuilder.appendWhere(TeamsTable.COLUMN_ID + "="
                         + uri.getLastPathSegment());
                 break;
             default:
@@ -96,8 +100,8 @@ public class ConversationContentProvider extends ContentProvider {
         int rowsDeleted = 0;
         long id = 0;
         switch (uriType) {
-            case MESSAGES:
-                id = sqlDB.insert(MessagesTable.TABLE_MESSAGES, null, values);
+            case TEAMS:
+                id = sqlDB.insert(TeamsTable.TABLE_TEAMS, null, values);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -112,19 +116,19 @@ public class ConversationContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         int rowsDeleted = 0;
         switch (uriType) {
-            case MESSAGES:
-                rowsDeleted = sqlDB.delete(MessagesTable.TABLE_MESSAGES, selection,
+            case TEAMS:
+                rowsDeleted = sqlDB.delete(TeamsTable.TABLE_TEAMS, selection,
                         selectionArgs);
                 break;
-            case MESSAGE_ID:
+            case TEAM_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = sqlDB.delete(MessagesTable.TABLE_MESSAGES,
-                            MessagesTable.COLUMN_ID + "=" + id,
+                    rowsDeleted = sqlDB.delete(TeamsTable.TABLE_TEAMS,
+                            TeamsTable.COLUMN_ID + "=" + id,
                             null);
                 } else {
-                    rowsDeleted = sqlDB.delete(MessagesTable.TABLE_MESSAGES,
-                            MessagesTable.COLUMN_ID + "=" + id
+                    rowsDeleted = sqlDB.delete(TeamsTable.TABLE_TEAMS,
+                            TeamsTable.COLUMN_ID + "=" + id
                                     + " and " + selection,
                             selectionArgs);
                 }
@@ -144,23 +148,23 @@ public class ConversationContentProvider extends ContentProvider {
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         int rowsUpdated = 0;
         switch (uriType) {
-            case MESSAGES:
-                rowsUpdated = sqlDB.update(MessagesTable.TABLE_MESSAGES,
+            case TEAMS:
+                rowsUpdated = sqlDB.update(TeamsTable.TABLE_TEAMS,
                         values,
                         selection,
                         selectionArgs);
                 break;
-            case MESSAGE_ID:
+            case TEAM_ID:
                 String id = uri.getLastPathSegment();
                 if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = sqlDB.update(MessagesTable.TABLE_MESSAGES,
+                    rowsUpdated = sqlDB.update(TeamsTable.TABLE_TEAMS,
                             values,
-                            MessagesTable.COLUMN_ID + "=" + id,
+                            TeamsTable.COLUMN_ID + "=" + id,
                             null);
                 } else {
-                    rowsUpdated = sqlDB.update(MessagesTable.TABLE_MESSAGES,
+                    rowsUpdated = sqlDB.update(TeamsTable.TABLE_TEAMS,
                             values,
-                            MessagesTable.COLUMN_ID + "=" + id
+                            TeamsTable.COLUMN_ID + "=" + id
                                     + " and "
                                     + selection,
                             selectionArgs);

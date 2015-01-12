@@ -1,20 +1,16 @@
 package com.teamchief.petergok.teamchief.tasks;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.database.SQLException;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.teamchief.petergok.teamchief.Constants;
-import com.teamchief.petergok.teamchief.activities.TeamViewActivity;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.gson.GsonMessage;
 import com.teamchief.petergok.teamchief.gson.GsonTeam;
-import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
-import com.teamchief.petergok.teamchief.model.MessagesTable;
-import com.teamchief.petergok.teamchief.model.objects.Message;
+import com.teamchief.petergok.teamchief.model.providers.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.tables.MessagesTable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -22,9 +18,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;

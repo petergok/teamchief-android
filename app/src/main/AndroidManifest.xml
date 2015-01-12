@@ -26,8 +26,12 @@
         android:theme="@style/AppTheme" >
 
         <provider
-            android:name=".model.ConversationContentProvider"
-            android:authorities="com.teamchief.petergok.teamchief.contentprovider" >
+            android:name=".model.providers.ConversationContentProvider"
+            android:authorities="com.teamchief.petergok.teamchief.conversationcontentprovider" >
+        </provider>
+        <provider
+            android:name=".model.providers.TeamsContentProvider"
+            android:authorities="com.teamchief.petergok.teamchief.teamscontentprovider" >
         </provider>
         <activity
             android:name=".activities.LoginActivity"

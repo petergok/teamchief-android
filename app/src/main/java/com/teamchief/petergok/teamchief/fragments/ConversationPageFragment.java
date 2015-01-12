@@ -19,8 +19,8 @@ import com.teamchief.petergok.teamchief.R;
 import com.teamchief.petergok.teamchief.activities.TeamViewActivity;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
 import com.teamchief.petergok.teamchief.adapters.MessageCursorAdapter;
-import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
-import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.providers.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.tables.MessagesTable;
 import com.teamchief.petergok.teamchief.tasks.SendMessageTask;
 
 /**

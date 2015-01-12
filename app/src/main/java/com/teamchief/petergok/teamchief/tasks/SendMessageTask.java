@@ -4,14 +4,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.teamchief.petergok.teamchief.Constants;
 import com.teamchief.petergok.teamchief.activities.delegate.ActivityDelegate;
-import com.teamchief.petergok.teamchief.fragments.ConversationPageFragment;
-import com.teamchief.petergok.teamchief.gson.GsonMessage;
-import com.teamchief.petergok.teamchief.gson.GsonTeam;
-import com.teamchief.petergok.teamchief.model.ConversationContentProvider;
-import com.teamchief.petergok.teamchief.model.MessagesTable;
+import com.teamchief.petergok.teamchief.model.providers.ConversationContentProvider;
+import com.teamchief.petergok.teamchief.model.tables.MessagesTable;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;

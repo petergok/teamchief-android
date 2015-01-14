@@ -108,6 +108,8 @@ public class TeamListActivity extends ActionBarActivity {
             c.moveToNext();
         }
 
+        c.close();
+
         return teamIds;
     }
 
@@ -115,6 +117,12 @@ public class TeamListActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         mDelegate.onResume();
+    }
+
+    @Override
+    protected void onDestroy () {
+        mDelegate.onDestroy();
+        super.onDestroy();
     }
 
     @Override

@@ -26,7 +26,7 @@ public class MessagesTable {
             + TABLE_MESSAGES
             + "("
             + COLUMN_ID + " integer primary key autoincrement, "
-            + COLUMN_MESSAGE_ID + " text not null,"
+            + COLUMN_MESSAGE_ID + " text not null unique,"
             + COLUMN_LOCAL + " integer not null, "
             + COLUMN_TEXT + " text not null, "
             + COLUMN_TEAM_ID + " text not null, "

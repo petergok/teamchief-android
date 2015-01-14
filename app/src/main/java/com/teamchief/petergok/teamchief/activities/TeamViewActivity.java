@@ -137,6 +137,12 @@ public class TeamViewActivity extends ActionBarActivity {
         mDelegate.onResume();
     }
 
+    @Override
+    protected void onDestroy () {
+        mDelegate.onDestroy();
+        super.onDestroy();
+    }
+
     public ActivityDelegate getDelegate() {
         return mDelegate;
     }

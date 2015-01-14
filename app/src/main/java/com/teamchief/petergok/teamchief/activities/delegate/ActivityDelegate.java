@@ -83,20 +83,25 @@ public class ActivityDelegate {
         }
     };
 
+    public void onDestroy() {
+        LocalBroadcastManager bManager = LocalBroadcastManager.getInstance(mActivity);
+        bManager.unregisterReceiver(bReceiver);
+    }
+
     public Activity getActivity() {
         return mActivity;
     }
 
     public void getNewMessages(String teamId) {
-        cleanTeam(teamId);
-
-        String where = MessagesTable.COLUMN_TEAM_ID + " = ? AND " + MessagesTable.COLUMN_SEND_TIME
+        String where = MessagesTable.COLUMN_TEAM_ID + " = ? AND " + MessagesTable.COLUMN_LOCAL
+                + " = ? AND " + MessagesTable.COLUMN_SEND_TIME
                 + " >= (select max(" + MessagesTable.COLUMN_SEND_TIME + ") from "
-                + MessagesTable.TABLE_MESSAGES + " where " + MessagesTable.COLUMN_TEAM_ID + " = ? )";
+                + MessagesTable.TABLE_MESSAGES + " where " + MessagesTable.COLUMN_TEAM_ID + " = ? AND " +
+                MessagesTable.COLUMN_LOCAL + " = ? )";
 
         Cursor cursor = mActivity.getContentResolver().query(ConversationContentProvider.CONTENT_URI,
                 new String[] {MessagesTable.COLUMN_SEND_TIME, MessagesTable.COLUMN_MESSAGE_ID}, where,
-                new String[] {teamId, teamId}, null);
+                new String[] {teamId, "" + MessagesTable.FALSE, teamId, "" + MessagesTable.FALSE}, null);
 
         cursor.moveToFirst();
         if (cursor.isAfterLast()) {
@@ -110,6 +115,8 @@ public class ActivityDelegate {
         }
 
         cursor.close();
+
+        cleanTeam(teamId);
     }
 
     public void cleanTeam(String teamId) {

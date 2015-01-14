@@ -133,8 +133,12 @@ public class GetTeamTask extends BaseTask {
                     messages.add(newValues);
                 }
             }
-            ContentValues[] contentValues = new ContentValues[messages.size()];
-            cr.bulkInsert(ConversationContentProvider.CONTENT_URI, messages.toArray(contentValues));
+            try {
+                ContentValues[] contentValues = new ContentValues[messages.size()];
+                cr.bulkInsert(ConversationContentProvider.CONTENT_URI, messages.toArray(contentValues));
+            } catch (Exception e) {
+                Log.e("Error inserting", e.getMessage());
+            }
         }
 
         Log.d("RESPONSE", result);

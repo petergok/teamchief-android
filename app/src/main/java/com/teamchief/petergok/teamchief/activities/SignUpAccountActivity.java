@@ -39,6 +39,11 @@ public class SignUpAccountActivity extends Activity {
         mDelegate.onResume();
     }
 
+    @Override
+    protected void onDestroy () {
+        mDelegate.onDestroy();
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

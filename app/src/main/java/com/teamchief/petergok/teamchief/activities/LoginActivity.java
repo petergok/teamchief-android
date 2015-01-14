@@ -169,6 +169,12 @@ public class LoginActivity extends PlusBaseActivity implements LoaderCallbacks<C
         mDelegate.onResume();
     }
 
+    @Override
+    protected void onDestroy () {
+        mDelegate.onDestroy();
+        super.onDestroy();
+    }
+
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }

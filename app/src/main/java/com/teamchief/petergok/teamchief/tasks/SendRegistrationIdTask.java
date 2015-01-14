@@ -54,7 +54,7 @@ public class SendRegistrationIdTask extends BaseTask {
 
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
             nameValuePairs.add(new BasicNameValuePair("gcmId", mGcmId));
-            nameValuePairs.add(new BasicNameValuePair("password", "" + mPassword));
+            nameValuePairs.add(new BasicNameValuePair("password", mPassword));
             nameValuePairs.add(new BasicNameValuePair("username", mUserName));
             method.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
